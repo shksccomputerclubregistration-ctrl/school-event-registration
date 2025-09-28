@@ -1,0 +1,244 @@
+<!doctype html>
+
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>School Event Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f11;
+      --panel:#071018;
+      --neon:#00ff7f;
+      --muted:#8aa0a0;
+      --accent:#00d4ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inconsolata, monospace;background:radial-gradient(ellipse at 10% 10%, #071a1a 0%, var(--bg) 40%), linear-gradient(180deg,#020406 0%, #061218 100%);color:#dfffe6}.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+.card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(0,255,127,0.06);box-shadow:0 10px 40px rgba(0,0,0,0.6);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:1fr 420px}
+
+/* Left panel (form) */
+.left{padding:36px}
+h1{font-family:Orbitron, sans-serif;margin:0 0 6px;font-size:28px;letter-spacing:1px;color:var(--neon);text-shadow:0 0 10px rgba(0,255,127,0.12)}
+p.lead{color:var(--muted);margin-top:0;font-size:14px}
+
+form{margin-top:18px}
+.field{margin-bottom:14px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+input[type=text], input[type=tel], input[type=email]{width:100%;padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:14px;outline:none;backdrop-filter: blur(2px)}
+
+.row{display:flex;gap:12px}
+.col{flex:1}
+
+.actions{display:flex;gap:12px;margin-top:18px;align-items:center}
+.btn{padding:12px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+.btn-primary{background:linear-gradient(90deg,var(--neon),var(--accent));color:#001;box-shadow:0 6px 30px rgba(0,212,255,0.06);}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--neon);}
+
+/* Right panel (visual ticket preview) */
+.right{background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(255,255,255,0.02));padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+.ticket-preview{width:100%;max-width:320px;border-radius:12px;padding:18px;background:linear-gradient(180deg, rgba(2,8,10,0.6), rgba(255,255,255,0.01));border:1px solid rgba(0,255,127,0.06);box-shadow:inset 0 1px 0 rgba(255,255,255,0.02)}
+.ticket-title{font-family:Orbitron, sans-serif;color:var(--accent);font-size:16px}
+.ticket-meta{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--muted)}
+.big-id{font-family:Orbitron, sans-serif;letter-spacing:2px;margin-top:12px;color:var(--neon);font-size:18px}
+
+footer.note{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+
+/* Modal */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,8,0.6);z-index:60;opacity:0;pointer-events:none;transition:all .18s}
+.modal.show{opacity:1;pointer-events:auto}
+.modal-card{background:var(--panel);padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);width:100%;max-width:520px}
+
+.success-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,#003b2f,#003b2f);color:var(--neon);font-weight:700}
+
+/* small screens */
+@media (max-width:880px){.card{grid-template-columns:1fr;}.right{order:-1}}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="left">
+        <h1>School Event Registration</h1>
+        <p class="lead">নতুন, জ্বালাও-জ্বালাও ডিজাইন — নাম, রোল ও ফোন দিয়ে রেজিস্ট্রেশন করে নিজের টিকেট নিয়ে নিন। Facebook পেজে লিংক শেয়ার করলেই সবাই ঢুকবে।</p><form id="regForm">
+      <div class="row">
+        <div class="col field">
+          <label for="name">নাম</label>
+          <input id="name" name="name" type="text" placeholder="আপনার পুরো নাম" required />
+        </div>
+        <div class="col field">
+          <label for="roll">রোল নম্বর</label>
+          <input id="roll" name="roll" type="text" placeholder="রোল/আইডি" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="phone">ফোন নাম্বার</label>
+        <input id="phone" name="phone" type="tel" placeholder="01XXXXXXXXX" pattern="[0-9+\- ]{6,}" required />
+      </div>
+
+      <div class="field">
+        <label for="email">ইমেইল (ঐচ্ছিক)</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" />
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">রেজিস্ট্রেশন করুন &amp; লাভ টিকেট</button>
+        <button class="btn btn-ghost" type="button" id="viewRegs">রেজিস্ট্রেশন লিস্ট দেখুন</button>
+      </div>
+    </form>
+
+    <div style="margin-top:18px;">
+      <small class="note">এই পেজে ফর্ম সাবমিট করার পরে টিকেট নতুন উইন্ডোতে খুলবে — আপনি সেটি প্রিন্ট বা সরাসরি ডাউনলোড করতে পারবেন।</small>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="ticket-preview" id="ticketPreview">
+      <div class="ticket-title">SCHOOL TECHFEST 2025</div>
+      <div class="ticket-meta"><div id="pvName">নাম: —</div><div id="pvRoll">রোল: —</div></div>
+      <div class="big-id" id="pvId">ID: —</div>
+    </div>
+    <div style="text-align:center;">
+      <small class="note">স্টাইল: হ্যাকিং-মোভ — গাঢ় ব্যাকগ্রাউন্ড, নিওন এক্সেন্ট।</small>
+    </div>
+  </div>
+</div>
+
+  </div>  <!-- modal -->  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><span class="success-badge">রেজিস্ট্রেশন সম্পন্ন</span></div>
+        <div><button id="closeModal" class="btn btn-ghost">বন্ধ</button></div>
+      </div>
+      <div style="margin-top:14px">
+        <div id="modalContent"></div>
+      </div>
+    </div>
+  </div>  <script>
+    const form = document.getElementById('regForm');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+    const modalContent = document.getElementById('modalContent');
+    const pvName = document.getElementById('pvName');
+    const pvRoll = document.getElementById('pvRoll');
+    const pvId = document.getElementById('pvId');
+    const viewRegs = document.getElementById('viewRegs');
+
+    function genId(){
+      const t = Date.now().toString(36);
+      const r = Math.random().toString(36).slice(2,8);
+      return (t + '-' + r).toUpperCase();
+    }
+
+    function saveRegistration(obj){
+      const key = 'school_event_regs_v1';
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push(obj);
+      localStorage.setItem(key, JSON.stringify(arr));
+    }
+
+    function openTicketWindow(ticketHtml){
+      const w = window.open('', '_blank');
+      w.document.write(ticketHtml);
+      w.document.close();
+      // try to focus and open print dialog
+      setTimeout(()=>{ w.focus(); }, 200);
+    }
+
+    function buildTicketHtml(data){
+      return `<!doctype html><html><head><meta charset="utf-8"><title>Ticket - ${data.id}</title>
+        <style>body{font-family:Inconsolata,monospace;background:#071018;color:#dfffe6;padding:40px} .ticket{max-width:680px;margin:0 auto;background:linear-gradient(90deg,#001a12,#02121b);border-radius:12px;padding:28px;border:1px solid rgba(0,255,127,0.06)} h2{font-family:Orbitron, sans-serif;color:${'#00d4ff'};margin:0} .meta{margin-top:12px;color:#bfeee0} .id{margin-top:18px;font-family:Orbitron, sans-serif;color:#00ff7f;font-size:20px} .hint{margin-top:20px;color:#9ecfc3;font-size:13px}</style></head><body>
+    <div class="ticket">
+      <h2>SCHOOL TECHFEST 2025 — Registration Ticket</h2>
+      <div class="meta">Name: ${escapeHtml(data.name)} | Roll: ${escapeHtml(data.roll)} | Phone: ${escapeHtml(data.phone)}</div>
+      <div class="id">Ticket ID: ${data.id}</div>
+      <div class="hint">এই টিকেটটি প্রিন্ট করুন অথবা স্মার্টফোনে রাখুন। এটির কপি দেখিয়ে ইভেন্টে প্রবেশ করতে পারবেন।</div>
+    </div>
+    <script>setTimeout(()=>{window.print()},600);</script>
+    </body></html>`;
+}
+
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+form.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const data = {
+    name: form.name.value.trim(),
+    roll: form.roll.value.trim(),
+    phone: form.phone.value.trim(),
+    email: form.email.value.trim(),
+    id: genId(),
+    createdAt: new Date().toISOString()
+  };
+
+  // update preview
+  pvName.textContent = 'নাম: ' + (data.name || '—');
+  pvRoll.textContent = 'রোল: ' + (data.roll || '—');
+  pvId.textContent = 'ID: ' + data.id;
+
+  // save
+  saveRegistration(data);
+
+  // modal content
+  modalContent.innerHTML = `<div style="padding:12px 0">
+      <div style="font-weight:700;font-size:15px">${escapeHtml(data.name)}</div>
+      <div style="margin-top:6px;color:var(--muted)">ID: ${data.id}</div>
+      <div style="margin-top:12px;display:flex;gap:10px">
+        <button id="printBtn" class="btn btn-primary">টিকেট প্রিন্ট/ডাউনলোড</button>
+        <button id="closeBtn" class="btn btn-ghost">বন্ধ</button>
+      </div>
+    </div>`;
+
+  modal.classList.add('show');
+
+  // attach print handler
+  setTimeout(()=>{
+    const printBtn = document.getElementById('printBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    printBtn.addEventListener('click', ()=>{
+      const ticketHtml = buildTicketHtml(data);
+      openTicketWindow(ticketHtml);
+    });
+    closeBtn.addEventListener('click', ()=>{ modal.classList.remove('show'); });
+  },50);
+
+  // clear only email field for next
+  form.email.value = '';
+});
+
+closeModal.addEventListener('click', ()=>{ modal.classList.remove('show'); });
+viewRegs.addEventListener('click', ()=>{
+  const key = 'school_event_regs_v1';
+  const arr = JSON.parse(localStorage.getItem(key) || '[]');
+  if(!arr.length){
+    modalContent.innerHTML = '<div style="padding:8px;color:var(--muted)">এখনও কোনো রেজিস্ট্রেশন হয়নি।</div>';
+  } else {
+    const rows = arr.slice(-50).reverse().map(r=>`<div style="padding:8px;border-bottom:1px dashed rgba(255,255,255,0.03);">${escapeHtml(r.name)} — ${escapeHtml(r.roll)} — ${escapeHtml(r.phone)} <div style="color:var(--muted);font-size:12px">ID: ${r.id} • ${new Date(r.createdAt).toLocaleString()}</div></div>`).join('');
+    modalContent.innerHTML = `<div style="max-height:420px;overflow:auto">${rows}</div>`;
+  }
+  modal.classList.add('show');
+});
+
+// small enhancement: prefill with ?name=&roll=&phone= from query string
+(function prefillFromQuery(){
+  try{
+    const params = new URLSearchParams(location.search);
+    if(params.get('name')) form.name.value = params.get('name');
+    if(params.get('roll')) form.roll.value = params.get('roll');
+    if(params.get('phone')) form.phone.value = params.get('phone');
+  }catch(e){}
+})();
+
+  </script>
+</body>
+</html>
